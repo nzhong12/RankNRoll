@@ -1,31 +1,48 @@
+//import React from 'react'
 import './App.css';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import data from '/test.json'
-
-fetch('./test.json')
-   /*  .then((res) => {
-      if (!res.ok) {
-          throw new Error
-              (`HTTP error! Status: ${res.status}`);
-      }
-      return res.json();}) */
-    .then((json) => console.log(json));
+import data from './colleges.json';
+import Table from 'react-bootstrap/Table';
 
 function App() {
+  /* fetch('test.json', { headers: {
+    'Content-Type': 'application/json',
+    'Accept':       'application/json'
+  }})
+  .then((res) => {
+    if (!res.ok) {
+        throw new Error
+            (`HTTP error! Status: ${res.status}`);
+    }
+    return res.json();}) 
+  .then((json) => console.log(json));  */
+
   return (
     <div className="App">
-      <Button variant="primary">Primary</Button>{' '}
-      <Button variant="secondary">Secondary</Button>{' '}
-      <Button variant="success">Success</Button>{' '}
-      <Button variant="warning">Warning</Button>{' '}
-      <Button variant="danger">Danger</Button>{' '}
-      <Button variant="info">Info</Button>{' '}
-      <Button variant="light">Light</Button>{' '}
-      <Button variant="dark">Dark</Button>
-      <Button variant="link">Link</Button>
-      <Button variant="outline-primary">Primary</Button>{' '}
-      <Button variant="outline-secondary">Secondary</Button>{' '}
+      <Button variant="primary">Top 300 National Universities</Button>{' '}
+      {/* <Button variant="secondary">Secondary</Button>{' '} */}
+      <br />
+      <Table striped bordered hover>
+{/*         <thead>
+          <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+          </tr>
+        </thead> */}
+        <tbody>
+        {
+            data.map((item, i) => 
+              <tr key={i}>
+                <td>{i+1}</td>
+                <td>{item.displayName}</td>
+                <td>{item.ranking}</td>
+              </tr>
+            )
+        }
+        </tbody>
+      </Table>
     </div>
   );
 }

@@ -1,5 +1,17 @@
-{
-    "id": 1,
-    "title": "Hello World",
-    "completed": false
-}
+[
+    {
+        "id": 1,
+        "title": "Hello World 1",
+        "completed": false
+    },
+    {
+        "id": 2,
+        "title": "Hello World 2",
+        "completed": false
+    },
+    {
+        "id": 3,
+        "title": "Hello World 3",
+        "completed": true
+    }
+]
