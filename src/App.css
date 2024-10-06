@@ -40,3 +40,63 @@
     transform: rotate(360deg);
   }
 }
+
+/* App custom css */
+#root {
+  display: flex; 
+  height: 100%;
+  width: 100%;
+}
+
+#sidebar {
+  padding: 1rem 1rem;
+  width: 22rem;
+  background-color: #f7f7f7;
+  border-right: solid 1px #e3e3e3;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebar nav {
+  flex: 1;
+  overflow: auto;
+  padding-top: 1rem;
+}
+
+#sidebar nav a span {
+  float: right;
+  color: #eeb004;
+}
+
+#sidebar > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+#sidebar > div form {
+  position: relative;
+}
+
+#detail h1 {
+/*   font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  margin: 0; */
+  padding: 0rem 0rem;
+/*   border-top: 1px solid #e3e3e3;
+  order: 1;
+  line-height: 1; */
+}
+
+/* no flex display inside detail div */
+#detail {
+  flex: 1;
+  padding: 1rem 1rem;
+  width: 100%;
+  float: right;
+}
