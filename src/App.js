@@ -1,6 +1,16 @@
 import './App.css';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import data from '/test.json'
+
+fetch('./test.json')
+   /*  .then((res) => {
+      if (!res.ok) {
+          throw new Error
+              (`HTTP error! Status: ${res.status}`);
+      }
+      return res.json();}) */
+    .then((json) => console.log(json));
 
 function App() {
   return (
