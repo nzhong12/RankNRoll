@@ -1,39 +1,20 @@
 import React from 'react'
 import './App.css';
-import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
 import { Outlet, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit, } from "react-router-dom";
+import { Sidebar } from './sidebar'
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 )
 
 function App() {
-  /* fetch('test.json', { headers: {
-    'Content-Type': 'application/json',
-    'Accept':       'application/json'
-  }})
-  .then((res) => {
-    if (!res.ok) {
-        throw new Error
-            (`HTTP error! Status: ${res.status}`);
-    }
-    return res.json();}) 
-  .then((json) => console.log(json));  */
-
   return (
     <>
-       <div id="sidebar">
-          <h1>Search</h1>
-          <div>
-          <nav>TODO
-          </nav>
-          <Button variant="primary">Submit</Button>  
-          </div>
-          
-        </div>
+      <Sidebar />
+       
       <div id="detail">
         {/* <div><Button variant="primary">Top 300 National Universities</Button></div> */}
         <h1>College List</h1>
