@@ -5,6 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
 
+const formatDollar = ( (x) => 
+  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+)
+
 function App() {
   /* fetch('test.json', { headers: {
     'Content-Type': 'application/json',
@@ -24,20 +28,20 @@ function App() {
       {/* <Button variant="secondary">Secondary</Button>{' '} */}
       <br />
       <Table striped bordered hover>
-{/*         <thead>
+        <thead>
           <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Rank</th>
+            <th>School</th>
+            <th>Tuition</th>
           </tr>
-        </thead> */}
+        </thead>
         <tbody>
         {
             data.map((item, i) => 
               <tr key={i}>
-                <td>{i+1}</td>
+                <td>{item.displayRank}</td>
                 <td>{item.displayName}</td>
-                <td>{item.ranking}</td>
+                <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
               </tr>
             )
         }

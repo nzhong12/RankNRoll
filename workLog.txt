@@ -1,1 +1,9 @@
-10/05/2024: get data from endpoint.
+10/05/2024: Got data from json file. Json is created from SQL server query and remain static.
+            No web service or database connection is needed for now.
+
+
+
+Todo:
+1. Create sidebar for search and filter. Search first.
+
+2. Save user preference to database (MongoDB)?
