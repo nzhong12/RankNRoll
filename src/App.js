@@ -3,8 +3,27 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
-import { Outlet, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit, } from "react-router-dom";
+import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit, } from "react-router-dom";
 import { Sidebar } from './sidebar'
+
+/* //Get all contacts. Used as rootLoader
+export async function loader({request}) {
+  //const contacts = await getContacts();
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const contacts = await getContacts(q);
+  return { contacts, q };
+}
+
+export async function getContacts(query) {
+  //await fakeNetwork(`getContacts:${query}`);
+  let contacts = await localforage.getItem("contacts");
+  if (!contacts) contacts = [];
+  if (query) {
+    contacts = matchSorter(contacts, query, { keys: ["first", "last"] });
+  }
+  return contacts.sort(sortBy("last", "createdAt"));
+} */
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -30,11 +49,7 @@ function App() {
           <tbody>
           {
               data.map((item, i) => 
-                <tr key={i}>
-                  <td>{item.displayRank}</td>
-                  <td>{item.displayName}</td>
-                  <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
-                </tr>
+                <College item={item} key={i}></College>
               )
           }
           </tbody>
@@ -45,5 +60,14 @@ function App() {
    
   );
 }
+
+const College = ({ item, i }) => (
+  <tr key={i}>
+    <td>{item.sortRank}</td>
+   <td><a href={item.WEBADDR}>{item.displayName}</a></td> 
+   {/*  <td>{item.displayName}</td>*/}
+    <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
+  </tr>
+);
 
 export default App;
