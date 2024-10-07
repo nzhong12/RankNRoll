@@ -4,6 +4,7 @@
 
 
 Todo:
-1. Create sidebar for search and filter. Search first.
-
-2. Save user preference to database (MongoDB)?
+1. Create sidebar for search and filter - done. For now keep it inside App.js - refactor later.
+2. Implement Search - todo next 
+3. useLoaderData must be used within a data router - todo next.
+4. Save user preference to database (MongoDB)?

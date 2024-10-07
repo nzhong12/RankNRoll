@@ -5,8 +5,11 @@ import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
 import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit, } from "react-router-dom";
 import { Sidebar } from './sidebar'
+import localforage from "localforage";
+import Button from 'react-bootstrap/Button';
+import { useEffect } from "react";
 
-/* //Get all contacts. Used as rootLoader
+ //Get all contacts. Used as rootLoader
 export async function loader({request}) {
   //const contacts = await getContacts();
   const url = new URL(request.url);
@@ -17,26 +20,41 @@ export async function loader({request}) {
 
 export async function getContacts(query) {
   //await fakeNetwork(`getContacts:${query}`);
-  let contacts = await localforage.getItem("contacts");
-  if (!contacts) contacts = [];
+  let list = await localforage.getItem("list");
+  if (!list) list = [];
   if (query) {
-    contacts = matchSorter(contacts, query, { keys: ["first", "last"] });
+    list = data.filter(item => item.displayName.toUpperCase().includes(query.toUpperCase()) || item.alias?item.alias.toUpperCase().includes(query.toUpperCase()) : false);
   }
-  return contacts.sort(sortBy("last", "createdAt"));
-} */
+  return list;
+} 
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 )
 
 function App() {
+  /* const { list, q } = useLoaderData();
+
+  useEffect(() => {
+    document.getElementById("q").value = q;
+  }, [q]); */
+
   return (
     <>
-      <Sidebar />
+      <div id="sidebar">
+        <h2>Search</h2>
+        <div>
+        <form>
+        <input id="searh" name="searh" type="search" placeholder=''></input>
+        <Button variant="primary">Submit</Button>
+        </form>  
+        </div>
+
+      </div>
        
       <div id="detail">
         {/* <div><Button variant="primary">Top 300 National Universities</Button></div> */}
-        <h1>College List</h1>
+        <h2>College List</h2>
         <div>
         <Table striped bordered hover>
           <thead>
