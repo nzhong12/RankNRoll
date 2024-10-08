@@ -7,7 +7,6 @@ import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, us
 import { Sidebar } from './sidebar'
 import localforage from "localforage";
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { useEffect } from "react";
 
  //Get all colleges. Used as rootLoader
