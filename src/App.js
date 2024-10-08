@@ -7,37 +7,50 @@ import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, us
 import { Sidebar } from './sidebar'
 import localforage from "localforage";
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { useEffect } from "react";
 
- //Get all contacts. Used as rootLoader
+ //Get all colleges. Used as rootLoader
 export async function loader({request}) {
   //const contacts = await getContacts();
   const url = new URL(request.url);
+  
   const q = url.searchParams.get("q");
-  const contacts = await getContacts(q);
-  return { contacts, q };
+  console.log("searching " + q);
+  const colleges = await getColleges(q);
+  return { colleges, q };
 }
 
-export async function getContacts(query) {
-  //await fakeNetwork(`getContacts:${query}`);
-  let list = await localforage.getItem("list");
-  if (!list) list = [];
-  if (query) {
-    list = data.filter(item => item.displayName.toUpperCase().includes(query.toUpperCase()) || item.alias?item.alias.toUpperCase().includes(query.toUpperCase()) : false);
+export async function getColleges(query) {
+  //await fakeNetwork(`getColleges:${query}`);
+  let colleges = await localforage.getItem("colleges");
+  if (!colleges) colleges = data;
+  console.log(query);
+
+  if (query != null) {
+    colleges = data.filter(item => item.displayName.toUpperCase().includes(query.toUpperCase()) 
+    || (item.alias!= null && item.alias.toUpperCase().includes(query.toUpperCase())));
   }
-  return list;
+  set(colleges);
+  return colleges;
 } 
+
+function set(colleges) {
+  console.log(colleges);
+  return localforage.setItem("colleges", colleges);
+}
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 )
 
 function App() {
-  /* const { list, q } = useLoaderData();
+  const { colleges, q } = useLoaderData();
+  const submit = useSubmit();
 
   useEffect(() => {
     document.getElementById("q").value = q;
-  }, [q]); */
+  }, [q]); 
 
   return (
     <>
@@ -45,7 +58,14 @@ function App() {
         <h2>Search</h2>
         <div>
         <form>
-        <input id="searh" name="searh" type="search" placeholder=''></input>
+        <input id="q" name="q" type="search" placeholder='' 
+                defaultValue={q}
+                onChange={(event) => {
+                  const isFirstSearch = q == null;
+                  submit(event.currentTarget.form, {
+                    replace: !isFirstSearch,
+                  });
+                }}></input>
         <Button variant="primary">Submit</Button>
         </form>  
         </div>
@@ -59,14 +79,14 @@ function App() {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Rank</th>
+              <th width="50px">Rank</th>
               <th>School</th>
-              <th>Tuition</th>
+              <th width="100px">Tuition</th>
             </tr>
           </thead>
           <tbody>
           {
-              data.map((item, i) => 
+              colleges.map((item, i) => 
                 <College item={item} key={i}></College>
               )
           }
