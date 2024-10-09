@@ -20,8 +20,9 @@ export async function loader({request}) {
   return { colleges, q };
 }
 
+
+
 export async function getColleges(query) {
-  //await fakeNetwork(`getColleges:${query}`);
   let colleges = await localforage.getItem("colleges");
   if (!colleges) colleges = data;
   console.log(query);
@@ -47,6 +48,12 @@ function App() {
   const { colleges, q } = useLoaderData();
   const submit = useSubmit();
 
+  const [top, setTop] = React.useState('100');
+  const handleChange = (event) => {
+    setTop({value: event.target.value});
+    console.log(top.value);
+  };
+
   useEffect(() => {
     document.getElementById("q").value = q;
   }, [q]); 
@@ -67,6 +74,14 @@ function App() {
                 }}></input>
         <Button variant="primary">Submit</Button>
         </form>  
+        </div>
+
+        <div>
+          <select id="top" onChange={handleChange} value={top.value}>
+            <option value="100">Top 100</option>
+            <option value="200">Top 200</option>
+          </select>
+          <p></p>          
         </div>
 
       </div>
