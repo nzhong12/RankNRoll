@@ -36,7 +36,7 @@ export async function getColleges(query) {
 } 
 
 function set(colleges) {
-  console.log(colleges);
+  console.log(colleges.length);
   return localforage.setItem("colleges", colleges);
 }
 
@@ -78,8 +78,11 @@ function App() {
 
         <div>
           <select id="top" onChange={handleChange} value={top.value}>
+            <option value="20">Top 20</option>
+            <option value="50">Top 50</option>
             <option value="100">Top 100</option>
             <option value="200">Top 200</option>
+            <option value="300">All</option>
           </select>
           <p></p>          
         </div>
