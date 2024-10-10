@@ -1,13 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
-import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit, } from "react-router-dom";
+import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit } from "react-router-dom";
 import { Sidebar } from './sidebar'
 import localforage from "localforage";
 import Button from 'react-bootstrap/Button';
-import { useEffect } from "react";
 
  //Get all colleges. Used as rootLoader
 export async function loader({request}) {
@@ -20,12 +19,9 @@ export async function loader({request}) {
   return { colleges, q };
 }
 
-
-
 export async function getColleges(query) {
   let colleges = await localforage.getItem("colleges");
   if (!colleges) colleges = data;
-  console.log(query);
 
   if (query != null) {
     colleges = data.filter(item => item.displayName.toUpperCase().includes(query.toUpperCase()) 
@@ -45,13 +41,20 @@ const formatDollar = ( (x) =>
 )
 
 function App() {
-  const { colleges, q } = useLoaderData();
+  let { colleges, q } = useLoaderData();
   const submit = useSubmit();
 
   const [top, setTop] = React.useState('100');
   const handleChange = (event) => {
     setTop({value: event.target.value});
-    console.log(top.value);
+
+    /* console.log("top is: ");
+    console.log(event.target.value);
+    console.log(top); */
+    const slicedData = data.slice(0, event.target.value);
+    colleges = slicedData;
+    set(slicedData);
+    console.log(slicedData.length);
   };
 
   useEffect(() => {
