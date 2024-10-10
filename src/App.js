@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
@@ -13,13 +13,16 @@ export async function loader({request}) {
   //const contacts = await getContacts();
   const url = new URL(request.url);
   
-  const q = url.searchParams.get("q");
-  console.log("searching " + q);
-  const colleges = await getColleges(q);
-  return { colleges, q };
+  const keyword = url.searchParams.get("keyword");
+  console.log("searching " + keyword);
+  const colleges = data; //await getColleges(keyword);
+  return { colleges, keyword };
 }
 
-export async function getColleges(query) {
+
+  
+
+/* export async function getColleges(query) {
   let colleges = await localforage.getItem("colleges");
   if (!colleges) colleges = data;
 
@@ -29,58 +32,93 @@ export async function getColleges(query) {
   }
   set(colleges);
   return colleges;
-} 
+}  */
 
-function set(colleges) {
+/* function set(colleges) {
   console.log(colleges.length);
   return localforage.setItem("colleges", colleges);
-}
+} */
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 )
 
 function App() {
-  let { colleges, q } = useLoaderData();
-  const submit = useSubmit();
+  const allColleges = data;
+  //let { colleges, keyword } = useLoaderData();
+  //const submit = useSubmit();
+  const [keyword, setKeyword] = useState('');                   // State for keyword search
+  const [n, setN] = useState(20);                              // State for number of top colleges
+  const [isKeywordSearch, setIsKeywordSearch] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);         // State for filtered colleges
 
-  const [top, setTop] = React.useState('100');
+  // Function to filter and limit colleges
+  const filterData = () => {
+    let updatedColleges = allColleges;
+    console.log("called");
+    // Filter by keyword if it exists
+    //updatedColleges = updatedColleges.slice(0, n);
+    
+    if (isKeywordSearch && keyword) {
+      updatedColleges = updatedColleges.filter((college) =>
+        college.displayName.toLowerCase().includes(keyword.toLowerCase())
+      );
+      
+    }
+    else if (n) {
+      updatedColleges = updatedColleges.slice(0, n);// Limit the number of colleges to `n`
+    }
+
+    setFilteredData(updatedColleges);
+  };
+
+  // Update the list of colleges when either keyword or `n` changes
+  useEffect(() => {
+    filterData();
+  }, [keyword, n, isKeywordSearch, allColleges]);
+
+  const handleKeywordSubmit = (e) => {
+    const newKey = e.target.value;
+    setKeyword(newKey);
+    //e.preventDefault();
+    setIsKeywordSearch(true);
+  };
+
+  const handleNChange = (e) => {
+    setN(Number(e.target.value));
+    setIsKeywordSearch(false); // Disable keyword search when `n` is selected
+  };
+
+  /* const [top, setTop] = React.useState('100');
   const handleChange = (event) => {
     setTop({value: event.target.value});
 
-    /* console.log("top is: ");
-    console.log(event.target.value);
-    console.log(top); */
     const slicedData = data.slice(0, event.target.value);
     colleges = slicedData;
     set(slicedData);
     console.log(slicedData.length);
-  };
+  }; */
 
-  useEffect(() => {
+/*   useEffect(() => {
     document.getElementById("q").value = q;
-  }, [q]); 
+  }, [q]);  */
 
   return (
     <>
       <div id="sidebar">
         <h2>Search</h2>
         <div>
-        <form>
-        <input id="q" name="q" type="search" placeholder='' 
-                defaultValue={q}
-                onChange={(event) => {
-                  const isFirstSearch = q == null;
-                  submit(event.currentTarget.form, {
-                    replace: !isFirstSearch,
-                  });
-                }}></input>
-        <Button variant="primary">Submit</Button>
+        <form onSubmit={handleKeywordSubmit}>
+        <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
+                 onChange={handleKeywordSubmit}></input>
+        <button type="submit">Submit</button>
         </form>  
         </div>
 
         <div>
-          <select id="top" onChange={handleChange} value={top.value}>
+          <select id="n" onChange={handleNChange} value={n}>
+            <option value="0">Select...</option>
+            <option value="10">Top 10</option>
             <option value="20">Top 20</option>
             <option value="50">Top 50</option>
             <option value="100">Top 100</option>
@@ -106,7 +144,7 @@ function App() {
           </thead>
           <tbody>
           {
-              colleges.map((item, i) => 
+              filteredData.map((item, i) => 
                 <College item={item} key={i}></College>
               )
           }
