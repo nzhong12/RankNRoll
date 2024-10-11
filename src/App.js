@@ -19,9 +19,6 @@ export async function loader({request}) {
   return { colleges, keyword };
 }
 
-
-  
-
 /* export async function getColleges(query) {
   let colleges = await localforage.getItem("colleges");
   if (!colleges) colleges = data;

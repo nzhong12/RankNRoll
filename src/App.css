@@ -218,3 +218,8 @@ button {
   line-height: 1.5;
   margin: 0;
 }
+
+.leaflet-container {
+  height: 200vh;
+  width: 300vh;
+}

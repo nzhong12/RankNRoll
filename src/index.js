@@ -1,6 +1,7 @@
 import React from 'react';
 import './index.css';
 import App, { loader as rootLoader } from "./App";
+import Map from "./MyMap"
 //import reportWebVitals from './reportWebVitals';
 import * as ReactDOM from "react-dom/client";
 import {
@@ -14,23 +15,17 @@ import ErrorPage from "./error-page";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      path="/"
-      element={<App />}
-      loader={rootLoader}
-      /* action={rootAction} */
+
+      <Route
+      path="/map"
+      element={<Map />}
+      /* loader={rootLoader}
+      action={rootAction} */
       errorElement={<ErrorPage />}
     >
-      {/* <Route errorElement={<ErrorPage />}>
-        <Route index element={<Index />} />
-        <Route
-          path="contacts/:contactId"
-          element={<Contact />}
-          loader={contactLoader}
-          action={contactAction}
-        />
-      </Route> */}
+
     </Route>
+   
   )
 );
 
