@@ -15,17 +15,23 @@ import ErrorPage from "./error-page";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-
-      <Route
+    <>
+    <Route
+      path="/"
+      element={<App />}
+      /* loader={rootLoader}
+      action={rootAction} */
+      errorElement={<ErrorPage />}
+    />
+ 
+    <Route
       path="/map"
       element={<Map />}
       /* loader={rootLoader}
       action={rootAction} */
       errorElement={<ErrorPage />}
-    >
-
-    </Route>
-   
+    />
+    </>
   )
 );
 

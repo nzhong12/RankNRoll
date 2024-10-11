@@ -114,7 +114,7 @@ function App() {
 
         <div>
           <select id="n" onChange={handleNChange} value={n}>
-            <option value="0">Select...</option>
+          <option value="5">Top 5</option>
             <option value="10">Top 10</option>
             <option value="20">Top 20</option>
             <option value="50">Top 50</option>
