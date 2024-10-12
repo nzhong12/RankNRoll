@@ -10,10 +10,10 @@ const SetMapBounds = () => {
   
   useEffect(() => {
     // Create an array of lat/lng coordinates
-    const southwest = [35, -124.4194]; // San Francisco
-    const northeast = [41, -70.0060];  // New York
-    const southwest1 = [31, -128.4194]; 
-    const northeast1 = [45, -68.0060]; 
+    const southwest = [34.8, -124.4194]; // San Francisco
+    const northeast = [40.8, -70.0060];  // New York
+    const southwest1 = [24, -134.4194]; 
+    const northeast1 = [51, -60.0060]; 
     // Fit the map to these bounds
     map.fitBounds([southwest, northeast], { padding: [100, 100] });
     map.setMaxBounds([southwest1, northeast1]);
@@ -28,9 +28,9 @@ const SetMapBounds = () => {
 
 const Map = () => {
     // The center of the map, you can change the initial position if needed
-    const initialPosition = [38, -97]; // Example: Harvard
-    const colleges = data.slice(0,20);
-    console.log(colleges.length);
+    const initialPosition = [37.8, -97]; 
+    const colleges = data.slice(0,50);
+    //console.log(colleges.length);
 
     const greenIcon = new L.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
