@@ -3,10 +3,12 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
-import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useSubmit } from "react-router-dom";
+import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useNavigate } from "react-router-dom";
 import { Sidebar } from './sidebar'
 import localforage from "localforage";
 import Button from 'react-bootstrap/Button';
+import CollegeList from './collegeList'
+
 
  //Get all colleges. Used as rootLoader
 export async function loader({request}) {
@@ -36,10 +38,6 @@ export async function loader({request}) {
   return localforage.setItem("colleges", colleges);
 } */
 
-const formatDollar = ( (x) => 
-  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-)
-
 function App() {
   const allColleges = data;
   //let { colleges, keyword } = useLoaderData();
@@ -52,9 +50,6 @@ function App() {
   // Function to filter and limit colleges
   const filterData = () => {
     let updatedColleges = allColleges;
-    console.log("called");
-    // Filter by keyword if it exists
-    //updatedColleges = updatedColleges.slice(0, n);
     
     if (isKeywordSearch && keyword) {
       updatedColleges = updatedColleges.filter((college) =>
@@ -89,19 +84,17 @@ function App() {
     setIsKeywordSearch(false); // Disable keyword search when `n` is selected
   };
 
-  /* const [top, setTop] = React.useState('100');
-  const handleChange = (event) => {
-    setTop({value: event.target.value});
-
-    const slicedData = data.slice(0, event.target.value);
-    colleges = slicedData;
-    set(slicedData);
-    console.log(slicedData.length);
-  }; */
-
-/*   useEffect(() => {
-    document.getElementById("q").value = q;
-  }, [q]);  */
+  const [isPageA, setIsPageA] = useState(true);  
+  const navigate = useNavigate();
+  const handleToggle = () => {
+    console.log('clicked ' + isPageA);
+    if (isPageA) {
+      navigate('/map');   // Navigate to map
+    } else {
+      navigate('/');   // Navigate to list
+    }
+    setIsPageA(!isPageA);  // Toggle the page state
+  };
 
   return (
     <>
@@ -109,11 +102,10 @@ function App() {
         <h2>Search</h2>
         <div>
         <form target="/Map">
-        <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
+          <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
                  onChange={handleKeywordSubmit}></input>
-        <Link to="/Map">
-        <Button type="button">View Map</Button>
-        </Link>
+          <Button type="button" 
+            onClick={handleToggle}>{isPageA ? 'View Map' : 'View List'}</Button>
         </form>  
         </div>
 
@@ -134,8 +126,8 @@ function App() {
       </div>
        
       <div id="detail">
-        {/* <div><Button variant="primary">Top 300 National Universities</Button></div> */}
-        <h2>College List</h2>
+        <Outlet />
+        {/* <h2>College List</h2>
         <div>
         <Table striped bordered hover>
           <thead>
@@ -153,20 +145,11 @@ function App() {
           }
           </tbody>
         </Table>
-        </div>
-      </div> 
+        </div>*/}
+      </div>  
     </>
    
   );
 }
-
-const College = ({ item, i }) => (
-  <tr key={i}>
-    <td>{item.sortRank}</td>
-   <td><a href={item.WEBADDR}>{item.displayName}</a></td> 
-   {/*  <td>{item.displayName}</td>*/}
-    <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
-  </tr>
-);
 
 export default App;
