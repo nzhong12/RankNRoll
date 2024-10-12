@@ -26,10 +26,32 @@ const SetMapBounds = () => {
   return null;
 };
 
+const createCustomIcon = (college) => {
+  let iconUrl;
+  //let size[,];
+  
+  if (college.icon == null) {
+    iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png';  // Icon for top 10 colleges
+  } else if (college.ranking < 20) {
+    iconUrl = '/icons/top50.png';  // Icon for top 50 colleges
+  } else {
+    iconUrl = '/icons/default.png'; // Default icon for other colleges
+  }
+
+  return L.icon({
+    iconUrl, // Set the icon URL based on ranking
+    iconSize: [25, 41], // Customize size
+    iconAnchor: [12, 41], // Point where the icon is anchored
+    popupAnchor: [1, -34], // Position of the popup relative to the icon
+    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    shadowSize: [41, 41], // Shadow size
+  });
+};
+
 const Map = () => {
     // The center of the map, you can change the initial position if needed
     const initialPosition = [37.8, -97]; 
-    const colleges = data.slice(0,50);
+    const colleges = data.slice(0,20);
     //console.log(colleges.length);
 
     const greenIcon = new L.Icon({
@@ -60,7 +82,7 @@ const Map = () => {
             url="https://b.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {colleges.map((college, index) => (
-            <Marker icon={index%2== 0? brownIcon : greenIcon} key={`item-${index}`} position={[Number(college.LAT), Number(college.LON)]}>
+            <Marker icon={college.iconType == "Ivy"? brownIcon : greenIcon} key={`item-${index}`} position={[Number(college.LAT), Number(college.LON)]}>
               <Popup>{college.displayName}</Popup>
             </Marker>
           ))}

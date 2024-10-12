@@ -63,7 +63,10 @@ function App() {
       
     }
     else if (n) {
-      updatedColleges = updatedColleges.slice(0, n);// Limit the number of colleges to `n`
+      if (n == 8) //Ivy
+        updatedColleges = updatedColleges.filter(c => c.iconType == "Ivy");
+      else
+        updatedColleges = updatedColleges.slice(0, n);// Limit the number of colleges to `n`
     }
 
     setFilteredData(updatedColleges);
@@ -105,16 +108,19 @@ function App() {
       <div id="sidebar">
         <h2>Search</h2>
         <div>
-        <form onSubmit={handleKeywordSubmit}>
+        <form target="/Map">
         <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
                  onChange={handleKeywordSubmit}></input>
-        <button type="submit">Submit</button>
+        <Link to="/Map">
+        <Button type="button">View Map</Button>
+        </Link>
         </form>  
         </div>
 
         <div>
           <select id="n" onChange={handleNChange} value={n}>
-          <option value="5">Top 5</option>
+            <option value="5">Top 5</option>
+            <option value="8">Ivy League</option>
             <option value="10">Top 10</option>
             <option value="20">Top 20</option>
             <option value="50">Top 50</option>
