@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
-import data from './colleges.json';
+//import data from './colleges.json';
 import L from 'leaflet';
 
 const SetMapBounds = () => {
@@ -48,11 +48,11 @@ const createCustomIcon = (college) => {
   });
 };
 
-const Map = () => {
+const Map = ({ colleges = [] }) => {
     // The center of the map, you can change the initial position if needed
     const initialPosition = [37.8, -97]; 
-    const colleges = data.slice(0,20);
-    //console.log(colleges.length);
+    //const colleges = data.slice(0,20);
+    console.log(colleges.length + " colleges passed");
 
     const greenIcon = new L.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',

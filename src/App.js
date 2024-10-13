@@ -21,23 +21,6 @@ export async function loader({request}) {
   return { colleges, keyword };
 }
 
-/* export async function getColleges(query) {
-  let colleges = await localforage.getItem("colleges");
-  if (!colleges) colleges = data;
-
-  if (query != null) {
-    colleges = data.filter(item => item.displayName.toUpperCase().includes(query.toUpperCase()) 
-    || (item.alias!= null && item.alias.toUpperCase().includes(query.toUpperCase())));
-  }
-  set(colleges);
-  return colleges;
-}  */
-
-/* function set(colleges) {
-  console.log(colleges.length);
-  return localforage.setItem("colleges", colleges);
-} */
-
 function App() {
   const allColleges = data;
   //let { colleges, keyword } = useLoaderData();
@@ -46,6 +29,7 @@ function App() {
   const [n, setN] = useState(20);                              // State for number of top colleges
   const [isKeywordSearch, setIsKeywordSearch] = useState(false);
   const [filteredData, setFilteredData] = useState([]);         // State for filtered colleges
+  const [refreshMap, setRefreshMap] = useState(false); 
 
   // Function to filter and limit colleges
   const filterData = () => {
@@ -55,22 +39,24 @@ function App() {
       updatedColleges = updatedColleges.filter((college) =>
         college.displayName.toLowerCase().includes(keyword.toLowerCase())
       );
-      
     }
     else if (n) {
-      if (n == 8) //Ivy
-        updatedColleges = updatedColleges.filter(c => c.iconType == "Ivy");
+      if (n === 8) //Ivy
+        updatedColleges = updatedColleges.filter(c => c.iconType === "Ivy");
       else
         updatedColleges = updatedColleges.slice(0, n);// Limit the number of colleges to `n`
     }
 
+    console.log(updatedColleges.length);
     setFilteredData(updatedColleges);
+    //setRefreshMap(false);
   };
 
   // Update the list of colleges when either keyword or `n` changes
   useEffect(() => {
-    filterData();
-  }, [keyword, n, isKeywordSearch, allColleges]);
+      console.log ("is n?" + n);
+      filterData();
+  }, [keyword, n, isKeywordSearch, refreshMap]);
 
   const handleKeywordSubmit = (e) => {
     const newKey = e.target.value;
@@ -84,16 +70,14 @@ function App() {
     setIsKeywordSearch(false); // Disable keyword search when `n` is selected
   };
 
-  const [isPageA, setIsPageA] = useState(true);  
-  const navigate = useNavigate();
-  const handleToggle = () => {
-    console.log('clicked ' + isPageA);
-    if (isPageA) {
-      navigate('/map');   // Navigate to map
-    } else {
-      navigate('/');   // Navigate to list
-    }
-    setIsPageA(!isPageA);  // Toggle the page state
+   
+  const handleRefresh = () => {
+    console.log("refresh clicked");
+    setRefreshMap(false);
+    setIsKeywordSearch(false); // Disable keyword search when `n` is selected
+    setTimeout(() => {
+      setRefreshMap(true);  // Trigger the effect to run
+    }, 0);
   };
 
   return (
@@ -101,7 +85,7 @@ function App() {
       <div id="sidebar">
         <h2>Search</h2>
         <div>
-        <form target="/Map">
+        <form>
           <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
                  onChange={handleKeywordSubmit}></input>
           
@@ -119,9 +103,9 @@ function App() {
           </select>
                  
         </div>
-        <div id="refreshButton"><Button type="button" size="sm" variant="outline-primary"
-            onClick={handleToggle}>Refresh Map</Button>
-        </div>   
+        {/* <div id="refreshButton"><Button type="button" size="sm" variant="outline-primary"
+            onClick={handleRefresh}>Refresh Map</Button>
+        </div>    */}
         <div>
         <Table striped bordered hover size="sm">
           <thead>
@@ -144,7 +128,7 @@ function App() {
       </div>
        
       <div id="detail">
-        <Map />
+        <Map colleges={filteredData} />
       </div>  
     </>
    
