@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
-//import data from './colleges.json';
 import L from 'leaflet';
 
 const SetMapBounds = () => {
@@ -26,25 +25,28 @@ const SetMapBounds = () => {
   return null;
 };
 
-const createCustomIcon = (college) => {
-  let iconUrl;
-  //let size[,];
+const getIcon = (college, n) => {
+  let iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png';  // 
+  let iconSize = [25, 41];
+  let shadowSize = [41, 41];
+  let iconAnchor = [12, 41];
   
-  if (college.icon == null) {
-    iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png';  // Icon for top 10 colleges
-  } else if (college.ranking < 20) {
-    iconUrl = '/icons/top50.png';  // Icon for top 50 colleges
-  } else {
-    iconUrl = '/icons/default.png'; // Default icon for other colleges
+  if (n === 8 && college.iconType === "Ivy") {
+    iconUrl = './' + college.iconImage + '.png';
+    iconSize = [30, 30];
+    shadowSize = [40, 40];
+    iconAnchor = [20, 20];
+  } else if (college.iconType === "Ivy") {
+    iconUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png';
   }
-
+  
   return L.icon({
     iconUrl, // Set the icon URL based on ranking
-    iconSize: [25, 41], // Customize size
-    iconAnchor: [12, 41], // Point where the icon is anchored
+    iconSize: iconSize, // Customize size
+    iconAnchor: iconAnchor, // Point where the icon is anchored
     popupAnchor: [1, -34], // Position of the popup relative to the icon
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    shadowSize: [41, 41], // Shadow size
+    shadowSize: shadowSize, // Shadow size
   });
 };
 
@@ -53,24 +55,6 @@ const Map = ({ colleges = [] }) => {
     const initialPosition = [37.8, -97]; 
     //const colleges = data.slice(0,20);
     console.log(colleges.length + " colleges passed");
-
-    const greenIcon = new L.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-
-    const brownIcon = new L.Icon({
-      iconUrl: './brown.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 25],
-      //iconAnchor: [12, 41],
-      //popupAnchor: [1, -34],
-      shadowSize: [35, 35]
-    });
 
     return (
       <div>
@@ -82,8 +66,9 @@ const Map = ({ colleges = [] }) => {
             url="https://b.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {colleges.map((college, index) => (
-            <Marker icon={college.iconType == "Ivy"? brownIcon : greenIcon} key={`item-${index}`} position={[Number(college.LAT), Number(college.LON)]}>
+            <Marker icon={getIcon(college, colleges.length)} key={`item-${index}`} position={[Number(college.LAT), Number(college.LON)]}>
               <Popup>{college.displayName}</Popup>
+              <Tooltip direction="right" offset={[10, 0]} opacity={0.85} permanent>{college.iconImage? college.iconImage : college.displayName}</Tooltip>
             </Marker>
           ))}
 

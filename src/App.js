@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
 import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useNavigate } from "react-router-dom";
-import { Sidebar } from './sidebar'
 import localforage from "localforage";
 import Button from 'react-bootstrap/Button';
 import Map from './Map'
