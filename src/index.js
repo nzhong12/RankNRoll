@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import App, { loader as rootLoader } from "./App";
-import Map from "./map"
+import Map from "./Map"
 //import reportWebVitals from './reportWebVitals';
 import * as ReactDOM from "react-dom/client";
 import {

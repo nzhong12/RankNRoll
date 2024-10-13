@@ -7,7 +7,7 @@ import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, us
 import { Sidebar } from './sidebar'
 import localforage from "localforage";
 import Button from 'react-bootstrap/Button';
-import CollegeList from './collegeList'
+import Map from './Map'
 
 
  //Get all colleges. Used as rootLoader
@@ -104,12 +104,9 @@ function App() {
         <form target="/Map">
           <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
                  onChange={handleKeywordSubmit}></input>
-          <Button type="button" 
-            onClick={handleToggle}>{isPageA ? 'View Map' : 'View List'}</Button>
+          
         </form>  
-        </div>
-
-        <div>
+       
           <select id="n" onChange={handleNChange} value={n}>
             <option value="5">Top 5</option>
             <option value="8">Ivy League</option>
@@ -120,16 +117,13 @@ function App() {
             <option value="200">Top 200</option>
             <option value="300">All</option>
           </select>
-          <p></p>          
+                 
         </div>
-
-      </div>
-       
-      <div id="detail">
-        <Outlet />
-        {/* <h2>College List</h2>
+        <div id="refreshButton"><Button type="button" size="sm" variant="outline-primary"
+            onClick={handleToggle}>Refresh Map</Button>
+        </div>   
         <div>
-        <Table striped bordered hover>
+        <Table striped bordered hover size="sm">
           <thead>
             <tr>
               <th width="50px">Rank</th>
@@ -145,11 +139,28 @@ function App() {
           }
           </tbody>
         </Table>
-        </div>*/}
+        </div>
+
+      </div>
+       
+      <div id="detail">
+        <Map />
       </div>  
     </>
    
   );
 }
 
+const College = ({ item, i }) => (
+  <tr key={i}>
+      <td>{item.sortRank}</td>
+      <td><a href={item.WEBADDR}>{item.displayName}</a></td> 
+      {/*  <td>{item.displayName}</td>*/}
+      <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
+  </tr>
+  );
+
+const formatDollar = ( (x) => 
+  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+)
 export default App;

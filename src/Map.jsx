@@ -19,8 +19,8 @@ const SetMapBounds = () => {
     map.setMaxBounds([southwest1, northeast1]);
     //map.setMaxBoundsViscosity(0.8);
 
-    map.setMinZoom(4);
-    map.setMaxZoom(10);
+    map.setMinZoom(5);
+    map.setMaxZoom(15);
   }, [map]);
 
   return null;
@@ -74,7 +74,7 @@ const Map = () => {
 
     return (
       <div>
-        <h2>College Map</h2>
+       {/*  <h2>College Map</h2> */}
       
         <MapContainer center={initialPosition} zoom={10} scrollWheelZoom={true} maxBoundsViscosity={0.6}>
           <TileLayer
