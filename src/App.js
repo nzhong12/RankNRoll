@@ -24,11 +24,11 @@ function App() {
   const allColleges = data;
   //let { colleges, keyword } = useLoaderData();
   //const submit = useSubmit();
-  const [keyword, setKeyword] = useState('');                   // State for keyword search
-  const [n, setN] = useState(20);                              // State for number of top colleges
+  const [keyword, setKeyword] = useState('');         // State for keyword search
+  const [n, setN] = useState(10);                     // State for number of top colleges
   const [isKeywordSearch, setIsKeywordSearch] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);         // State for filtered colleges
-  const [refreshMap, setRefreshMap] = useState(false); 
+  const [filteredData, setFilteredData] = useState([]);    // State for filtered colleges
+  const [selectedLocation, setSelectedLocation] = useState([37.8, -97]);
 
   // Function to filter and limit colleges
   const filterData = () => {
@@ -48,14 +48,12 @@ function App() {
 
     console.log(updatedColleges.length);
     setFilteredData(updatedColleges);
-    //setRefreshMap(false);
   };
 
   // Update the list of colleges when either keyword or `n` changes
   useEffect(() => {
-      console.log ("is n?" + n);
-      filterData();
-  }, [keyword, n, isKeywordSearch, refreshMap]);
+    filterData();
+  }, [keyword, n, isKeywordSearch, selectedLocation]);
 
   const handleKeywordSubmit = (e) => {
     const newKey = e.target.value;
@@ -69,15 +67,10 @@ function App() {
     setIsKeywordSearch(false); // Disable keyword search when `n` is selected
   };
 
-   
-  const handleRefresh = () => {
-    console.log("refresh clicked");
-    setRefreshMap(false);
-    setIsKeywordSearch(false); // Disable keyword search when `n` is selected
-    setTimeout(() => {
-      setRefreshMap(true);  // Trigger the effect to run
-    }, 0);
-  };
+  const handleZoom = (lat, lon) => {
+    console.log("clicked " + lat + "--" + lon);
+    setSelectedLocation([lat, lon]);
+  }
 
   return (
     <>
@@ -95,6 +88,7 @@ function App() {
             <option value="8">Ivy League</option>
             <option value="10">Top 10</option>
             <option value="20">Top 20</option>
+            <option value="30">Top 30</option>
             <option value="50">Top 50</option>
             <option value="100">Top 100</option>
             <option value="200">Top 200</option>
@@ -102,22 +96,19 @@ function App() {
           </select>
                  
         </div>
-        {/* <div id="refreshButton"><Button type="button" size="sm" variant="outline-primary"
-            onClick={handleRefresh}>Refresh Map</Button>
-        </div>    */}
         <div>
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
               <th width="50px">Rank</th>
               <th>School</th>
-              <th width="100px">Tuition</th>
+              <th width="80px">Tuition</th>
             </tr>
           </thead>
           <tbody>
           {
-              filteredData.map((item, i) => 
-                <College item={item} key={i}></College>
+              filteredData.map((item, index) => 
+                <College item={item} key={index} index={index} onClick={handleZoom}></College>
               )
           }
           </tbody>
@@ -127,18 +118,18 @@ function App() {
       </div>
        
       <div id="detail">
-        <Map colleges={filteredData} />
+        <Map colleges={filteredData} initialPosition={selectedLocation}/>
       </div>  
     </>
    
   );
 }
 
-const College = ({ item, i }) => (
-  <tr key={i}>
+const College = ({ item, index, onClick }) => (
+  <tr key={index}>
       <td>{item.sortRank}</td>
-      <td><a href={item.WEBADDR}>{item.displayName}</a></td> 
-      {/*  <td>{item.displayName}</td>*/}
+      <td><a href={"#zoom" + index} onClick={() => onClick(item.LAT, item.LON)}>{item.displayName}</a></td> 
+      {/*  <td><Button variant="link">{item.displayName}</Button></td>*/}
       <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
   </tr>
   );
