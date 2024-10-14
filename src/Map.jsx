@@ -8,23 +8,23 @@ const SetMapBounds = () => {
   const map = useMap(); // Access the map instance
   
   useEffect(() => {
-    // Create an array of lat/lng coordinates
-    const southwest = [34.8, -124.4194]; // San Francisco
-    const northeast = [40.8, -70.0060];  // New York
-    const southwest1 = [24, -134.4194]; 
-    const northeast1 = [51, -60.0060]; 
+    const southwest = [34.8, -124.4194]; // of US map
+    const northeast = [40.8, -70.0060];  
+    const southwest1 = [23.8, -134.4194]; // outside US
+    const northeast1 = [50.8, -60.0060]; 
     // Fit the map to these bounds
     map.fitBounds([southwest, northeast], { padding: [100, 100] });
-    map.setMaxBounds([southwest1, northeast1]);
+    map.setMaxBounds([southwest1, northeast1]); //allows enough space at zoom in
     //map.setMaxBoundsViscosity(0.8);
 
-    map.setMinZoom(5);
-    map.setMaxZoom(15);
+    map.setMinZoom(5);  //about twice as large as US
+    map.setMaxZoom(15); //close enough to view college location
   }, []);
 
   return null;
 };
 
+//n: # of colleges are selected. n=8 is special case for the Ivy League.
 const getIcon = (college, n) => {
   const baseUrl = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/';
   let iconUrl = baseUrl + 'marker-icon-2x-green.png';   
@@ -33,13 +33,14 @@ const getIcon = (college, n) => {
   let iconAnchor = [12, 41];
   
   if (n === 8 && college.iconType === "Ivy") {
-    iconUrl = './' + college.iconImage + '.png';
+    iconUrl = './' + college.iconImage + '.png';  //each ivy has unique icon
     iconSize = [30, 30];
     shadowSize = [40, 40];
     iconAnchor = [20, 20];
-  } else if (college.iconType === "Ivy") {
+  } 
+ /*  else if (college.iconType === "Ivy") {
     iconUrl = baseUrl + 'marker-icon-2x-red.png';
-  }
+  } */
   
   return L.icon({
     iconUrl, // Set the icon URL based on ranking
@@ -51,14 +52,13 @@ const getIcon = (college, n) => {
   });
 };
 
+// Recenter the map whenever the center prop changes
 const ChangeMapCenter = ({ center }) => {
   const map = useMap(); // Get the map instance
 
   useEffect(() => {
     if (center) {
-      map.setView(center, 10); // Recenter the map whenever the center prop changes
-      
-      //map.fitBounds([center[0]-2, [center[1]-2], [34.8, -124.4194]], { padding: [100, 100] });
+      map.setView(center, 9); 
     }
   }, [center, map]);
 
@@ -66,19 +66,11 @@ const ChangeMapCenter = ({ center }) => {
 };
 
 const Map = ({ colleges = [], initialPosition }) => {
-    // The center of the map, you can change the initial position if needed
-    //const initialPosition = [37.8, -97]; 
-    //const colleges = data.slice(0,20);
-    console.log(initialPosition[0] + " passed");
-   /*  useEffect(() => {
-      if (selectedCollege && initialPosition) {
-        mapRef.current.setView([selectedCollege.lat, selectedCollege.lng], 13); // Set the zoom level to 13
-      }
-    }, [initialPosition]); */
-    const mapRef = useRef(null);
+    
+  const mapRef = useRef(null);
     useEffect(() => {
-      if (initialPosition && mapRef.current) {
-        mapRef.current.setView(initialPosition, 10); // Set the zoom level to 13
+      if (initialPosition && mapRef.current) {  //not sure about mapRef.current
+        mapRef.current.setView(initialPosition, 10); // 
       }
     }, [initialPosition]);
 

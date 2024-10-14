@@ -3,44 +3,26 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
-import { Outlet, Link, NavLink, useLoaderData, Form, redirect, useNavigation, useNavigate } from "react-router-dom";
-import localforage from "localforage";
-import Button from 'react-bootstrap/Button';
-import Map from './Map'
-
-
- //Get all colleges. Used as rootLoader
-export async function loader({request}) {
-  //const contacts = await getContacts();
-  const url = new URL(request.url);
-  
-  const keyword = url.searchParams.get("keyword");
-  console.log("searching " + keyword);
-  const colleges = data; //await getColleges(keyword);
-  return { colleges, keyword };
-}
+import Map from './map'
 
 function App() {
-  const allColleges = data;
-  //let { colleges, keyword } = useLoaderData();
-  //const submit = useSubmit();
   const [keyword, setKeyword] = useState('');         // State for keyword search
-  const [n, setN] = useState(10);                     // State for number of top colleges
+  const [n, setN] = useState(20);                     // State for number of top colleges
   const [isKeywordSearch, setIsKeywordSearch] = useState(false);
   const [filteredData, setFilteredData] = useState([]);    // State for filtered colleges
   const [selectedLocation, setSelectedLocation] = useState([37.8, -97]);
 
   // Function to filter and limit colleges
   const filterData = () => {
-    let updatedColleges = allColleges;
+    let updatedColleges = data;
     
     if (isKeywordSearch && keyword) {
       updatedColleges = updatedColleges.filter((college) =>
         college.displayName.toLowerCase().includes(keyword.toLowerCase())
       );
     }
-    else if (n) {
-      if (n === 8) //Ivy
+    else if (n) {   //use picks top n schools
+      if (n === 8)  //Ivy Leagues selectd
         updatedColleges = updatedColleges.filter(c => c.iconType === "Ivy");
       else
         updatedColleges = updatedColleges.slice(0, n);// Limit the number of colleges to `n`
@@ -80,11 +62,10 @@ function App() {
         <form>
           <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 
                  onChange={handleKeywordSubmit}></input>
-          
         </form>  
        
           <select id="n" onChange={handleNChange} value={n}>
-            <option value="5">Top 5</option>
+            {/* <option value="5">Top 5</option> */}
             <option value="8">Ivy League</option>
             <option value="10">Top 10</option>
             <option value="20">Top 20</option>
@@ -92,7 +73,7 @@ function App() {
             <option value="50">Top 50</option>
             <option value="100">Top 100</option>
             <option value="200">Top 200</option>
-            <option value="300">All</option>
+            <option value="300">All 300</option>
           </select>
                  
         </div>
@@ -106,22 +87,18 @@ function App() {
             </tr>
           </thead>
           <tbody>
-          {
-              filteredData.map((item, index) => 
+          { filteredData.map((item, index) => 
                 <College item={item} key={index} index={index} onClick={handleZoom}></College>
-              )
-          }
+            )}
           </tbody>
         </Table>
         </div>
-
       </div>
        
       <div id="detail">
         <Map colleges={filteredData} initialPosition={selectedLocation}/>
       </div>  
     </>
-   
   );
 }
 
@@ -129,7 +106,6 @@ const College = ({ item, index, onClick }) => (
   <tr key={index}>
       <td>{item.sortRank}</td>
       <td><a href={"#zoom" + index} onClick={() => onClick(item.LAT, item.LON)}>{item.displayName}</a></td> 
-      {/*  <td><Button variant="link">{item.displayName}</Button></td>*/}
       <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
   </tr>
   );
@@ -137,4 +113,5 @@ const College = ({ item, index, onClick }) => (
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 )
+
 export default App;

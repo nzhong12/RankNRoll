@@ -3,7 +3,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
-import localforage from "localforage";
 
 const formatDollar = ( (x) => 
     x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -11,8 +10,6 @@ const formatDollar = ( (x) =>
 
 function CollegeList() {
     const allColleges = data;
-    //let { colleges, keyword } = useLoaderData();
-    //const submit = useSubmit();
     const [keyword, setKeyword] = useState('');                   // State for keyword search
     const [n, setN] = useState(20);                              // State for number of top colleges
     const [isKeywordSearch, setIsKeywordSearch] = useState(false);
@@ -58,20 +55,6 @@ function CollegeList() {
       setIsKeywordSearch(false); // Disable keyword search when `n` is selected
     };
   
-    /* const [top, setTop] = React.useState('100');
-    const handleChange = (event) => {
-      setTop({value: event.target.value});
-  
-      const slicedData = data.slice(0, event.target.value);
-      colleges = slicedData;
-      set(slicedData);
-      console.log(slicedData.length);
-    }; */
-  
-  /*   useEffect(() => {
-      document.getElementById("q").value = q;
-    }, [q]);  */
-  
     return (
       <>
         <h2>College List</h2>
@@ -105,6 +88,5 @@ const College = ({ item, i }) => (
     <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
 </tr>
 );
-
 
 export default CollegeList;
