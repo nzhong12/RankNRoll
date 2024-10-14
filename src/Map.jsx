@@ -38,9 +38,12 @@ const getIcon = (college, n) => {
     shadowSize = [40, 40];
     iconAnchor = [20, 20];
   } 
- /*  else if (college.iconType === "Ivy") {
+  else if (college.iconType === "Ivy") {
+    iconUrl = baseUrl + 'marker-icon-2x-blue.png';
+  }
+  else if (college.sortRank <= 10) {
     iconUrl = baseUrl + 'marker-icon-2x-red.png';
-  } */
+  }
   
   return L.icon({
     iconUrl, // Set the icon URL based on ranking
@@ -76,7 +79,7 @@ const Map = ({ colleges = [], initialPosition }) => {
 
     return (
       <div>
-        <h2>College Map</h2>
+        <h2><i>U.S. News</i> Ranked College Map</h2>
       
         <MapContainer center={initialPosition} zoom={10} scrollWheelZoom={true} maxBoundsViscosity={0.6} whe>
           <TileLayer
@@ -86,7 +89,8 @@ const Map = ({ colleges = [], initialPosition }) => {
           {colleges.map((college, index) => (
             <Marker icon={getIcon(college, colleges.length)} key={`item-${index}`} position={[Number(college.LAT), Number(college.LON)]}>
               <Popup><a href={college.WEBADDR} target="_blank">{college.displayName}</a></Popup>
-              <Tooltip direction="right" offset={[10, 0]} opacity={0.85}>{"#" + college.sortRank + ": " + college.displayName}</Tooltip>
+              <Tooltip direction="right" offset={[10, 0]} opacity={0.85}>{"#" + college.sortRank + ": " + college.displayName}</Tooltip> 
+              {/* <Tooltip direction="right" offset={[10, 0]} opacity={0.85} permanent>{"#" + college.sortRank}</Tooltip>*/}
             </Marker>
           ))}
 
