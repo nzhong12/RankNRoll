@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useFetcher } from "react-router-dom";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
@@ -83,12 +84,13 @@ function App() {
             <tr>
               <th width="50px">Rank</th>
               <th>School</th>
-              <th width="80px">Tuition</th>
+              <th width="50px">State</th>
+              <th width="40px">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
           { filteredData.map((item, index) => 
-                <College item={item} key={index} index={index} onClick={handleZoom}></College>
+                <College college={item} key={index} index={index} onClick={handleZoom}></College>
             )}
           </tbody>
         </Table>
@@ -102,13 +104,50 @@ function App() {
   );
 }
 
-const College = ({ item, index, onClick }) => (
-  <tr key={index}>
-      <td>{item.sortRank}</td>
-      <td><a href={"#zoom" + index} onClick={() => onClick(item.LAT, item.LON)}>{item.displayName}</a></td> 
-      <td>${item.tuition? formatDollar(item.tuition) : ""}</td>
-  </tr>
+const College = ({ college, index, onClick }) => {
+  const [isFavorite, setIsFavorite] = useState(college.isFavorite);
+
+  const handleFavoriteClick = () => {
+    // Toggle the favorite status
+    setIsFavorite(!isFavorite);
+
+    // Update the parent component (if needed)
+    //onFavoriteToggle(college.id);
+  };
+
+  return (
+    <tr key={index}>
+      <td>{college.sortRank}</td>
+      <td><a href={"#zoom" + index} onClick={() => onClick(college.LAT, college.LON)}>{college.displayName}</a></td> 
+      {/* <td>${item.tuition? formatDollar(item.tuition) : ""}</td> */}
+      <td>{college.state}</td>
+      <td><button onClick={handleFavoriteClick}>
+        {isFavorite ? '⭐' : '☆'}
+      </button></td>
+    </tr>
   );
+};
+
+const Favorite = ({ college }) => {
+    const fetcher = useFetcher();
+    const favorite = college.favorite;
+  
+    return (
+      <fetcher.Form method="post" action="favorite">
+        <button
+          name="favorite"
+          value={favorite ? "false" : "true"}
+          aria-label={
+            favorite
+              ? "Remove from favorites"
+              : "Add to favorites"
+          }
+        >
+          {favorite ? "★" : "☆"}
+        </button>
+      </fetcher.Form>
+    );
+  }
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")

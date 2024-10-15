@@ -89,7 +89,7 @@ const Map = ({ colleges = [], initialPosition }) => {
           {colleges.map((college, index) => (
             <Marker icon={getIcon(college, colleges.length)} key={`item-${index}`} position={[Number(college.LAT), Number(college.LON)]}>
               <Popup><a href={college.WEBADDR} target="_blank">{college.displayName}</a></Popup>
-              <Tooltip direction="right" offset={[10, 0]} opacity={0.85}>{"#" + college.sortRank + ": " + college.displayName}</Tooltip> 
+              <Tooltip direction="right" offset={[10, 0]} opacity={0.85} >{college.sortRank + ". " + college.displayName}</Tooltip> 
               {/* <Tooltip direction="right" offset={[10, 0]} opacity={0.85} permanent>{"#" + college.sortRank}</Tooltip>*/}
             </Marker>
           ))}
