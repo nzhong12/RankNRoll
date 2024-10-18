@@ -19,7 +19,8 @@ function App() {
     
     if (isKeywordSearch && keyword) {
       updatedColleges = updatedColleges.filter((college) =>
-        college.displayName.toLowerCase().includes(keyword.toLowerCase())
+       college.displayName.toLowerCase().includes(keyword.toLowerCase()) 
+        /*  college.state.toLowerCase()===(keyword.toLowerCase()) && college.sortRank < 100 */
       );
     }
     else if (n) {   //use picks top n schools
@@ -58,7 +59,7 @@ function App() {
   return (
     <>
       <div id="sidebar">
-        <h2>Search</h2>
+        {/* <h2>Search</h2> */}
         <div>
         <form>
           <input id="keyword" name="keyword" type="search" placeholder='' value={keyword} 

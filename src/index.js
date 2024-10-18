@@ -11,7 +11,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import ErrorPage from "./error-page";
-import CollegeList from './collegeList'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,7 +22,7 @@ const router = createBrowserRouter(
       action={rootAction} */
       errorElement={<ErrorPage />}
     >
-    <Route index element={<CollegeList />} />
+    {/* <Route index element={<CollegeList />} /> */}
     <Route
       path="/map"
       element={<Map />}
