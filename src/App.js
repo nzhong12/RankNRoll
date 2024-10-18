@@ -12,6 +12,13 @@ function App() {
   const [isKeywordSearch, setIsKeywordSearch] = useState(false);
   const [filteredData, setFilteredData] = useState([]);    // State for filtered colleges
   const [selectedLocation, setSelectedLocation] = useState([37.8, -97]);
+  // const [favorites, setFavorites] = useState([]);
+
+  // Load favorites from localStorage when the component mounts
+  // useEffect(() => {
+  //   const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  //   setFavorites(storedFavorites);
+  // }, []);
 
   // Function to filter and limit colleges
   const filterData = () => {
@@ -36,6 +43,8 @@ function App() {
 
   // Update the list of colleges when either keyword or `n` changes
   useEffect(() => {
+    //localStorage.setItem('favorites', JSON.stringify(favorites));
+
     filterData();
   }, [keyword, n, isKeywordSearch, selectedLocation]);
 
@@ -55,6 +64,14 @@ function App() {
     console.log("clicked " + lat + "--" + lon);
     setSelectedLocation([lat, lon]);
   }
+
+/*   const handleFavoriteClick = (college) => {
+    if (favorites.includes(college.id)) {
+      setFavorites(favorites.filter(fav => fav !== college.id)); // Remove from favorites
+    } else {
+      setFavorites([...favorites, college.id]); // Add to favorites
+    }
+  }; */
 
   return (
     <>
@@ -91,10 +108,10 @@ function App() {
           </thead>
           <tbody>
           { filteredData.map((item, index) => 
-                <College college={item} key={index} index={index} onClick={handleZoom}></College>
+                <College college={item} key={index} index={index} onClick={handleZoom} ></College>
             )}
           </tbody>
-        </Table>
+        </Table>{/*  */}
         </div>
       </div>
        
@@ -105,16 +122,7 @@ function App() {
   );
 }
 
-const College = ({ college, index, onClick }) => {
-  const [isFavorite, setIsFavorite] = useState(college.isFavorite);
-
-  const handleFavoriteClick = () => {
-    // Toggle the favorite status
-    setIsFavorite(!isFavorite);
-
-    // Update the parent component (if needed)
-    //onFavoriteToggle(college.id);
-  };
+const College = ({ college, index, onClick, isFavorite}) => {
 
   return (
     <tr key={index}>
@@ -122,33 +130,15 @@ const College = ({ college, index, onClick }) => {
       <td><a href={"#zoom" + index} onClick={() => onClick(college.LAT, college.LON)}>{college.displayName}</a></td> 
       {/* <td>${item.tuition? formatDollar(item.tuition) : ""}</td> */}
       <td>{college.state}</td>
-      <td><button onClick={handleFavoriteClick}>
-        {isFavorite ? '⭐' : '☆'}
-      </button></td>
+     {/*  <td><button onClick={handleFavoriteClick(college)}>
+        {isFavorite ? '★' : '☆'}
+      </button></td> */}
+      
     </tr>
   );
 };
 
-const Favorite = ({ college }) => {
-    const fetcher = useFetcher();
-    const favorite = college.favorite;
-  
-    return (
-      <fetcher.Form method="post" action="favorite">
-        <button
-          name="favorite"
-          value={favorite ? "false" : "true"}
-          aria-label={
-            favorite
-              ? "Remove from favorites"
-              : "Add to favorites"
-          }
-        >
-          {favorite ? "★" : "☆"}
-        </button>
-      </fetcher.Form>
-    );
-  }
+
 
 const formatDollar = ( (x) => 
   x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
