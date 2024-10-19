@@ -69,7 +69,7 @@ function App() {
   }
 
   const handleFavoriteClick = (college) => {
-    console.log("clicked");
+    //console.log("clicked");
     college.isFavorite = !college.isFavorite;
     if (favorites.includes(college.xwalkId)) {
       setFavorites(favorites.filter(fav => fav !==college.xwalkId)); // Remove from favorites
