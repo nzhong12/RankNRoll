@@ -70,11 +70,12 @@ function App() {
   }
 
   const handleFavoriteClick = (college) => {
-    console.log(`"clicked " + {college.isFavorite}"`);
-    if (favorites.includes(college.id)) {
-      setFavorites(favorites.filter(fav => fav !== college.id)); // Remove from favorites
+    console.log("clicked");
+    college.isFavorite = !college.isFavorite;
+    if (favorites.includes(college.xwalkId)) {
+      setFavorites(favorites.filter(fav => fav !==college.xwalkId)); // Remove from favorites
     } else {
-      setFavorites([...favorites, college.id]); // Add to favorites
+      setFavorites([...favorites, college.xwalkId]); // Add to favorites
     }
   };
 
@@ -135,7 +136,7 @@ const College = ({ college, index, onClick, handleFavoriteClick}) => {
       <td><a href={"#zoom" + index} onClick={() => onClick(college.LAT, college.LON)}>{college.displayName}</a></td> 
       {/* <td>${item.tuition? formatDollar(item.tuition) : ""}</td> */}
       <td>{college.state}</td>
-      <td><button onClick={handleFavoriteClick}>
+      <td><button onClick={() => handleFavoriteClick(college)}>
         {college.isFavorite ? '★' : '☆'}
       </button></td>
       
