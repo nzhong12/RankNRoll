@@ -65,7 +65,6 @@ function App() {
   };
 
   const handleZoom = (lat, lon) => {
-    
     setSelectedLocation([lat, lon]);
   }
 
