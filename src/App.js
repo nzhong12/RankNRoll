@@ -117,7 +117,7 @@ function App() {
                 <College college={item} key={index} index={index} onClick={handleZoom} handleFavoriteClick={handleFavoriteClick}></College>
             )}
           </tbody>
-        </Table>{/*  */}
+        </Table>
         </div>
       </div>
        
