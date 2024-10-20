@@ -6,7 +6,6 @@ import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
 import Map from './map';
 
-
 function App() {
   const [keyword, setKeyword] = useState('');         // State for keyword search
   const [n, setN] = useState(20);                     // State for number of top colleges
