@@ -107,7 +107,6 @@ const Map = ({ colleges = [], initialPosition }) => {
         </MapContainer>
       </div>    
     );
-
   };
   
   export default Map;
