@@ -4,7 +4,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import data from './colleges.json';
 import Table from 'react-bootstrap/Table';
-import Map from './map'
+import Map from './map';
 
 function App() {
   const [keyword, setKeyword] = useState('');         // State for keyword search
