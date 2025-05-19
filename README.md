@@ -1,8 +1,8 @@
+# RankNRoll: 
+
 Interactive React app that maps and filters U.S. colleges based on U.S. News rankings. Features custom markers, live search, and local favoriting. 
 
 Laid the groundwork for CleverApp, coming soon — a smarter, more customizable version of CommonApp.
-
-
 
 # Getting Started with Create React App
 
